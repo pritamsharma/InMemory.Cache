@@ -3,10 +3,10 @@ using Microsoft.Extensions.Configuration;
 
 namespace InMemory.Cache.Test.Memcached
 {
+
     [TestClass]
-    public class MemcachedAdapterTest
+    public class MemcachedAdapterTest : CacheAdapterTestBase
     {
-        private CacheAdapterTest TestCacheAdapter { get; set; }
 
         public MemcachedAdapterTest()
         {
@@ -20,51 +20,49 @@ namespace InMemory.Cache.Test.Memcached
 
             var redisAdapterFactory = new MemcachedAdapterFactory(address, port, expiryTimeSeconds, sessionId, keyPrefix ?? string.Empty);
 
-            var redisAdapter = redisAdapterFactory.CreateCacheAdapter();
-
-            TestCacheAdapter = new CacheAdapterTest(redisAdapter);
+            CacheAdapter = redisAdapterFactory.CreateCacheAdapter();
         }
 
         [TestMethod]
-        public void SetTestPositive()
+        public override void SetTestPositive()
         {
-            TestCacheAdapter.SetTestPositive();
+            base.SetTestPositive();
         }
 
         [TestMethod]
-        public void GetTestPositive()
+        public override void GetTestPositive()
         {
-            TestCacheAdapter.GetTestPositive();
+            base.GetTestPositive();
         }
 
         [TestMethod]
-        public void GetTestNegative()
+        public override void GetTestNegative()
         {
-            TestCacheAdapter.GetTestNegative();
+            base.GetTestNegative();
         }
 
         [TestMethod]
-        public void RemoveTestPositive()
+        public override void RemoveTestPositive()
         {
-            TestCacheAdapter.RemoveTestPositive();
+            base.RemoveTestPositive();
         }
 
         [TestMethod]
-        public void RemoveTestNegative()
+        public override void RemoveTestNegative()
         {
-            TestCacheAdapter.RemoveTestNegative();
+            base.RemoveTestNegative();
         }
 
         [TestMethod]
-        public void IsSetTestPositive()
+        public override void IsSetTestPositive()
         {
-            TestCacheAdapter.IsSetTestPositive();
+            base.IsSetTestPositive();
         }
 
         [TestMethod]
-        public void IsSetTestNegative()
+        public override void IsSetTestNegative()
         {
-            TestCacheAdapter.IsSetTestNegative();
+            base.IsSetTestNegative();
         }
 
     }

@@ -3,15 +3,10 @@ using Newtonsoft.Json.Linq;
 
 namespace InMemory.Cache.Test
 {
-    internal class CacheAdapterTest
+    public abstract class CacheAdapterTestBase
     {
 
-        ICacheAdapter CacheAdapter { get; set; }
-
-        public CacheAdapterTest(ICacheAdapter adapter)
-        {
-            CacheAdapter = adapter;
-        }
+        public ICacheAdapter CacheAdapter { get; set; }
 
         private JObject GenerateTestData
         {
@@ -34,7 +29,7 @@ namespace InMemory.Cache.Test
             }
         }
 
-        public void SetTestPositive()
+        public virtual void SetTestPositive()
         {
             var key = "SetTestPositive_Key";
             var isSuccess = CacheAdapter.Set(key, GenerateTestData);
@@ -42,7 +37,7 @@ namespace InMemory.Cache.Test
             Assert.IsTrue(isSuccess);
         }
 
-        public void GetTestPositive()
+        public virtual void GetTestPositive()
         {
             var key = "GetTestPositive_Key";
             CacheAdapter.Set(key, GenerateTestData);
@@ -51,14 +46,14 @@ namespace InMemory.Cache.Test
             Assert.IsTrue(cacheValue != null && cacheValue.HasValues);
         }
 
-        public void GetTestNegative()
+        public virtual void GetTestNegative()
         {
             var key = "GetTestNegative_Key";
             var cacheValue = CacheAdapter.Get<JObject>(key);
             Assert.IsTrue(cacheValue == null || !cacheValue.HasValues);
         }
 
-        public void RemoveTestPositive()
+        public virtual void RemoveTestPositive()
         {
             var key = "RemoveTestPositive_Key";
             CacheAdapter.Set(key, GenerateTestData);
@@ -66,7 +61,7 @@ namespace InMemory.Cache.Test
             Assert.IsTrue(isSuccess);
         }
 
-        public void RemoveTestNegative()
+        public virtual void RemoveTestNegative()
         {
             var key = "RemoveTestNegative_Key";
             var isSuccess = RemoveKey(key);
@@ -78,7 +73,7 @@ namespace InMemory.Cache.Test
             return CacheAdapter.Remove(key);
         }
 
-        public void IsSetTestPositive()
+        public virtual void IsSetTestPositive()
         {
             var key = "IsSetTestPositive_Key";
             CacheAdapter.Set(key, GenerateTestData);
@@ -87,7 +82,7 @@ namespace InMemory.Cache.Test
             Assert.IsTrue(isSuccess);
         }
 
-        public void IsSetTestNegative()
+        public virtual void IsSetTestNegative()
         {
             var key = "IsSetTestNegative_Key";
             var isSuccess = CacheAdapter.IsSet(key);
