@@ -1,4 +1,5 @@
 ﻿using InMemory.Cache.Interface;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 
 namespace InMemory.Cache.Test
@@ -6,9 +7,16 @@ namespace InMemory.Cache.Test
     public abstract class CacheAdapterTestBase
     {
 
-        public ICacheAdapter CacheAdapter { get; set; }
+        internal ICacheAdapter CacheAdapter { get; set; }
 
-        private JObject GenerateTestData
+        internal IConfigurationRoot Configuration { get; set; }
+
+        public CacheAdapterTestBase()
+        {
+            Configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: true, reloadOnChange: true).Build();
+        }
+
+        internal JObject GenerateTestData
         {
             get
             {
@@ -68,7 +76,7 @@ namespace InMemory.Cache.Test
             Assert.IsFalse(isSuccess);
         }
 
-        private bool RemoveKey(string key)
+        internal bool RemoveKey(string key)
         {
             return CacheAdapter.Remove(key);
         }

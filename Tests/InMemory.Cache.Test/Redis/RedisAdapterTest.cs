@@ -1,5 +1,4 @@
 ﻿using InMemory.Cache.Redis;
-using Microsoft.Extensions.Configuration;
 
 namespace InMemory.Cache.Test.Redis
 {
@@ -9,11 +8,9 @@ namespace InMemory.Cache.Test.Redis
 
         public RedisAdapterTest()
         {
-            var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json", optional: true, reloadOnChange: true).Build();
-
-            var connectionString = configuration["redis:address"] + ":" + configuration["redis:port"] + ",allowAdmin=" + configuration["redis:allowAdmin"];
-            var expiryTimeSeconds = Convert.ToInt32(configuration["redis:expiryTime"]);
-            var keyPrefix = configuration["redis:CacheKeyPrefix"] ?? string.Empty;
+            var connectionString = Configuration["redis:address"] + ":" + Configuration["redis:port"] + ",allowAdmin=" + Configuration["redis:allowAdmin"];
+            var expiryTimeSeconds = Convert.ToInt32(Configuration["redis:expiryTime"]);
+            var keyPrefix = Configuration["redis:CacheKeyPrefix"] ?? string.Empty;
             var sessionId = new Random().Next().ToString();
 
             var redisAdapterFactory = new RedisAdapterFactory(connectionString ?? string.Empty, expiryTimeSeconds, sessionId, keyPrefix ?? string.Empty);
