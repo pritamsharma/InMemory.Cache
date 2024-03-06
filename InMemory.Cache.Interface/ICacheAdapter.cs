@@ -4,12 +4,12 @@ namespace InMemory.Cache.Interface
 {
     public interface ICacheAdapter
     {
-        bool Set<T>(string key, T value);
+        Task<bool> Set<T>(string key, T value);
 
-        T? Get<T>(string key);
+        Task<T?> Get<T>(string key);
 
-        bool IsSet(string key);
+        Task<bool> IsSet(string key);
 
-        bool Remove(string key);
+        Task<bool> Remove(string key);
     }
 }

@@ -22,12 +22,12 @@ namespace InMemory.Cache.Memcached
         /// <summary>
         /// Session Id
         /// </summary>
-        private string SessionId { get; set; }
+        private string SessionId { get; set; } = string.Empty;
 
         /// <summary>
         /// Prefix to be used in addition to user provided Redis Key
         /// </summary>
-        private string CacheKeyPrefix { get; set; }
+        private string CacheKeyPrefix { get; set; } = string.Empty;
 
         #endregion Private Properties
 
@@ -52,14 +52,7 @@ namespace InMemory.Cache.Memcached
         /// </summary>
         /// <param name="connectionString"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        private void SetClient(IMemcachedClient client)
-        {
-            if (client == null)
-            {
-                throw new ArgumentNullException("Client value can not be null.");
-            }
-            Client = client;
-        }
+        private void SetClient(IMemcachedClient client) => Client = client ?? throw new ArgumentNullException(nameof(client), "Value can not be null.");
 
         /// <summary>
         /// Creates Prefix for the key by appending sessionId and and a choosen prefix.
@@ -94,10 +87,7 @@ namespace InMemory.Cache.Memcached
         /// <typeparam name="T"></typeparam>
         /// <param name="value"></param>
         /// <returns></returns>
-        private string SerializeToJson<T>(T value)
-        {
-            return value == null ? string.Empty : JsonConvert.SerializeObject(value);
-        }
+        private string SerializeToJson<T>(T value) => value == null ? string.Empty : JsonConvert.SerializeObject(value);
 
         /// <summary>
         /// Deserialize JSON string to object
@@ -105,15 +95,7 @@ namespace InMemory.Cache.Memcached
         /// <typeparam name="T"></typeparam>
         /// <param name="value"></param>
         /// <returns></returns>
-        private T? DeserializeToObject<T>(string value)
-        {
-            var result = default(T);
-            if (!string.IsNullOrEmpty(value))
-            {
-                result = JsonConvert.DeserializeObject<T>(value.ToString());
-            }
-            return result;
-        }
+        private T? DeserializeToObject<T>(string value) => string.IsNullOrEmpty(value) ? default : JsonConvert.DeserializeObject<T>(value.ToString());
 
         #endregion Private Methods
 
@@ -126,13 +108,13 @@ namespace InMemory.Cache.Memcached
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns>True if successful</returns>
-        public bool Set<T>(string key, T value)
+        public async Task<bool> Set<T>(string key, T value)
         {
             var keyValue = ConstructKey(key);
 
             var serializedValue = SerializeToJson(value);
 
-            return Client.Set(keyValue, serializedValue, ExpiryTime);
+            return await Client.SetAsync(keyValue, serializedValue, ExpiryTime);
         }
 
         /// <summary>
@@ -141,13 +123,13 @@ namespace InMemory.Cache.Memcached
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
         /// <returns></returns>
-        public T? Get<T>(string key)
+        public async Task<T?> Get<T>(string key)
         {
             var keyValue = ConstructKey(key);
 
-            var returnValue = Client.Get<string>(keyValue);
+            var returnValue = await Client.GetAsync<string>(keyValue);
 
-            return DeserializeToObject<T>(returnValue);
+            return DeserializeToObject<T>(returnValue.Value);
         }
 
         /// <summary>
@@ -155,11 +137,11 @@ namespace InMemory.Cache.Memcached
         /// </summary>
         /// <param name="key"></param>
         /// <returns>True if successful</returns>
-        public bool Remove(string key)
+        public async Task<bool> Remove(string key)
         {
             var keyValue = ConstructKey(key);
 
-            return Client.Remove(keyValue);
+            return await Client.RemoveAsync(keyValue);
         }
 
         /// <summary>
@@ -167,11 +149,13 @@ namespace InMemory.Cache.Memcached
         /// </summary>
         /// <param name="key">Key name</param>
         /// <returns>True if key found</returns>
-        public bool IsSet(string key)
+        public async Task<bool> IsSet(string key)
         {
             var keyValue = ConstructKey(key);
 
-            return Client.TryGet<string>(keyValue, out _);
+            var value = await Client.GetAsync<string>(keyValue);
+
+            return value.HasValue;
         }
 
         #endregion Public Methods

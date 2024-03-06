@@ -21,45 +21,45 @@ namespace InMemory.Cache.Test.Memcached
         }
 
         [TestMethod]
-        public override void SetTestPositive()
+        public override async Task SetTestPositive()
         {
-            base.SetTestPositive();
+            await base.SetTestPositive();
         }
 
         [TestMethod]
-        public override void GetTestPositive()
+        public override async Task GetTestPositive()
         {
-            base.GetTestPositive();
+            await base.GetTestPositive();
         }
 
         [TestMethod]
-        public override void GetTestNegative()
+        public override async Task GetTestNegative()
         {
-            base.GetTestNegative();
+            await base.GetTestNegative();
         }
 
         [TestMethod]
-        public override void RemoveTestPositive()
+        public override async Task RemoveTestPositive()
         {
-            base.RemoveTestPositive();
+            await base.RemoveTestPositive();
         }
 
         [TestMethod]
-        public override void RemoveTestNegative()
+        public override async Task RemoveTestNegative()
         {
-            base.RemoveTestNegative();
+            await base.RemoveTestNegative();
         }
 
         [TestMethod]
-        public override void IsSetTestPositive()
+        public override async Task IsSetTestPositive()
         {
-            base.IsSetTestPositive();
+            await base.IsSetTestPositive();
         }
 
         [TestMethod]
-        public override void IsSetTestNegative()
+        public override async Task IsSetTestNegative()
         {
-            base.IsSetTestNegative();
+            await base.IsSetTestNegative();
         }
 
     }

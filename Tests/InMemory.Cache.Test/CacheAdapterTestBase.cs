@@ -37,63 +37,88 @@ namespace InMemory.Cache.Test
             }
         }
 
-        public virtual void SetTestPositive()
+        public virtual async Task SetTestPositive()
         {
             var key = "SetTestPositive_Key";
-            var isSuccess = CacheAdapter.Set(key, GenerateTestData);
-            RemoveKey(key);
+
+            var isSuccess = await SetValue(key);
+
+            _ = await RemoveKey(key);
+
             Assert.IsTrue(isSuccess);
         }
 
-        public virtual void GetTestPositive()
+        internal async Task<bool> SetValue(string key)
+        {
+            return await CacheAdapter.Set(key, GenerateTestData);
+        }
+
+        public virtual async Task GetTestPositive()
         {
             var key = "GetTestPositive_Key";
-            CacheAdapter.Set(key, GenerateTestData);
-            var cacheValue = CacheAdapter.Get<JObject>(key);
-            RemoveKey(key);
+
+            _ = await SetValue(key);
+
+            var cacheValue = await CacheAdapter.Get<JObject>(key);
+
+            _ = await RemoveKey(key);
+
             Assert.IsTrue(cacheValue != null && cacheValue.HasValues);
         }
 
-        public virtual void GetTestNegative()
+        public virtual async Task GetTestNegative()
         {
             var key = "GetTestNegative_Key";
-            var cacheValue = CacheAdapter.Get<JObject>(key);
+
+            var cacheValue = await CacheAdapter.Get<JObject>(key);
+
             Assert.IsTrue(cacheValue == null || !cacheValue.HasValues);
         }
 
-        public virtual void RemoveTestPositive()
+        public virtual async Task RemoveTestPositive()
         {
             var key = "RemoveTestPositive_Key";
-            CacheAdapter.Set(key, GenerateTestData);
-            var isSuccess = RemoveKey(key);
+
+            _ = await SetValue(key);
+
+            var isSuccess = await RemoveKey(key);
+
             Assert.IsTrue(isSuccess);
         }
 
-        public virtual void RemoveTestNegative()
+        public virtual async Task RemoveTestNegative()
         {
             var key = "RemoveTestNegative_Key";
-            var isSuccess = RemoveKey(key);
+
+            var isSuccess = await RemoveKey(key);
+
             Assert.IsFalse(isSuccess);
         }
 
-        internal bool RemoveKey(string key)
+        internal async Task<bool> RemoveKey(string key)
         {
-            return CacheAdapter.Remove(key);
+            return await CacheAdapter.Remove(key);
         }
 
-        public virtual void IsSetTestPositive()
+        public virtual async Task IsSetTestPositive()
         {
             var key = "IsSetTestPositive_Key";
-            CacheAdapter.Set(key, GenerateTestData);
-            var isSuccess = CacheAdapter.IsSet(key);
-            CacheAdapter.Remove(key);
+
+            _ = await SetValue(key);
+
+            var isSuccess = await CacheAdapter.IsSet(key);
+
+            _ = await RemoveKey(key);
+
             Assert.IsTrue(isSuccess);
         }
 
-        public virtual void IsSetTestNegative()
+        public virtual async Task IsSetTestNegative()
         {
             var key = "IsSetTestNegative_Key";
-            var isSuccess = CacheAdapter.IsSet(key);
+
+            var isSuccess = await CacheAdapter.IsSet(key);
+
             Assert.IsFalse(isSuccess);
         }
 

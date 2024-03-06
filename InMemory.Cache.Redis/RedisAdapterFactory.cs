@@ -5,21 +5,24 @@ namespace InMemory.Cache.Redis
 {
     public class RedisAdapterFactory : ICacheAdapterFactory
     {
+
         public ConnectionMultiplexer? Connection { get; private set; }
 
-        private int ExpiryTimeSeconds { get; set; }
+        public IDatabase? Database { get; private set; }
 
-        private string Configuration { get; set; }
+        public int ExpiryTimeSeconds { get; private set; }
 
-        private string SessionId { get; set; }
+        public string Configuration { get; private set; }
 
-        private string KeyPrefix { get; set; }
+        public string SessionId { get; private set; }
+
+        public string KeyPrefix { get; private set; }
 
         public RedisAdapterFactory(string configuration, int expiryTimeSeconds, string sessionId = "", string cacheKeyPrefix = "")
         {
             if (string.IsNullOrEmpty(configuration))
             {
-                throw new ArgumentNullException("Configuration value can not be null.");
+                throw new ArgumentNullException(nameof(configuration), "Value can not be null.");
             }
 
             Configuration = configuration.Trim();
@@ -31,18 +34,23 @@ namespace InMemory.Cache.Redis
         public ICacheAdapter CreateCacheAdapter()
         {
             Connection = ConnectionMultiplexer.Connect(Configuration);
-            var database = Connection.GetDatabase();
+            Database = Connection.GetDatabase();
 
-            var redisAdapter = new RedisAdapter(database, ExpiryTimeSeconds, SessionId, KeyPrefix);
-
-            return redisAdapter;
+            return new RedisAdapter(Database, ExpiryTimeSeconds, SessionId, KeyPrefix);
         }
 
         public void Dispose()
         {
-            if (Connection != null)
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing && Connection != null)
             {
-                Connection.Close();
+                Connection.Dispose();
+                Connection = null;
             }
         }
     }

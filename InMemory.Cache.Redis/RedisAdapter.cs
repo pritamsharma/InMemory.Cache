@@ -25,12 +25,12 @@ namespace InMemory.Cache.Redis
         /// <summary>
         /// Session Id
         /// </summary>
-        private string SessionId { get; set; }
+        public string SessionId { get; private set; } = string.Empty;
 
         /// <summary>
         /// Prefix to be used in addition to user provided Redis Key
         /// </summary>
-        private string CacheKeyPrefix { get; set; }
+        public string CacheKeyPrefix { get; private set; } = string.Empty; 
 
         #endregion Private Properties
 
@@ -55,14 +55,7 @@ namespace InMemory.Cache.Redis
         /// </summary>
         /// <param name="connectionString"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        private void SetDatabase(IDatabase database)
-        {
-            if (database == null)
-            {
-                throw new ArgumentNullException("Database value can not be null.");
-            }
-            Database = database;
-        }
+        private void SetDatabase(IDatabase database) => Database = database ?? throw new ArgumentNullException(nameof(database), "Value can not be null.");
 
         /// <summary>
         /// Creates Prefix for the key by appending sessionId and and a choosen prefix.
@@ -71,7 +64,7 @@ namespace InMemory.Cache.Redis
         /// <param name="cacheKeyPrefix"></param>
         private void SetKeys(string sessionId, string cacheKeyPrefix)
         {
-            if(string.IsNullOrEmpty(sessionId))
+            if (string.IsNullOrEmpty(sessionId))
             {
                 SessionId = string.Empty;
             }
@@ -97,10 +90,7 @@ namespace InMemory.Cache.Redis
         /// <typeparam name="T"></typeparam>
         /// <param name="value"></param>
         /// <returns></returns>
-        private string SerializeToJson<T>(T value)
-        {
-            return value == null ? string.Empty : JsonConvert.SerializeObject(value);
-        }
+        private string SerializeToJson<T>(T value) => value == null ? string.Empty : JsonConvert.SerializeObject(value);
 
         /// <summary>
         /// Deserialize JSON string to object
@@ -108,15 +98,7 @@ namespace InMemory.Cache.Redis
         /// <typeparam name="T"></typeparam>
         /// <param name="value"></param>
         /// <returns></returns>
-        private T? DeserializeToObject<T>(RedisValue value)
-        {
-            var result = default(T);
-            if(value.HasValue && value.Length() > 0)
-            {
-                result = JsonConvert.DeserializeObject<T>(value.ToString());
-            }
-            return result;
-        }
+        private T? DeserializeToObject<T>(RedisValue value) => value.HasValue && value.Length() > 0 ? JsonConvert.DeserializeObject<T>(value.ToString()) : default;
 
         #endregion Private Methods
 
@@ -129,7 +111,7 @@ namespace InMemory.Cache.Redis
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns>True if successful</returns>
-        public bool Set<T>(string key, T value)
+        public async Task<bool> Set<T>(string key, T value)
         {
             var keyValue = ConstructKey(key);
 
@@ -137,7 +119,7 @@ namespace InMemory.Cache.Redis
 
             var redisValue = new RedisValue(serializedValue);
 
-            return Database.StringSet(keyValue, redisValue, ExpiryTime);
+            return await Database.StringSetAsync(keyValue, redisValue, ExpiryTime);
         }
 
         /// <summary>
@@ -146,11 +128,11 @@ namespace InMemory.Cache.Redis
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
         /// <returns></returns>
-        public T? Get<T>(string key)
+        public async Task<T?> Get<T>(string key)
         {
             var keyValue = ConstructKey(key);
 
-            var redisValue = Database.StringGet(keyValue);
+            var redisValue = await Database.StringGetAsync(keyValue);
 
             return DeserializeToObject<T>(redisValue);
         }
@@ -160,11 +142,11 @@ namespace InMemory.Cache.Redis
         /// </summary>
         /// <param name="key"></param>
         /// <returns>True if successful</returns>
-        public bool Remove(string key)
+        public async Task<bool> Remove(string key)
         {
             var keyValue = ConstructKey(key);
 
-            return Database.KeyDelete(keyValue);
+            return await Database.KeyDeleteAsync(keyValue);
         }
 
         /// <summary>
@@ -172,11 +154,11 @@ namespace InMemory.Cache.Redis
         /// </summary>
         /// <param name="key">Key name</param>
         /// <returns>True if key found</returns>
-        public bool IsSet(string key)
+        public async Task<bool> IsSet(string key)
         {
             var keyValue = ConstructKey(key);
 
-            return Database.KeyExists(keyValue);
+            return await Database.KeyExistsAsync(keyValue);
         }
 
         #endregion Public Methods

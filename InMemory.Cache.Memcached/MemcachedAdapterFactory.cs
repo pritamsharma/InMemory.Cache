@@ -2,29 +2,30 @@
 using Microsoft.Extensions.DependencyInjection;
 using Enyim.Caching.Configuration;
 using Enyim.Caching;
+using Microsoft.Extensions.Configuration;
 
 namespace InMemory.Cache.Memcached
 {
     public class MemcachedAdapterFactory : ICacheAdapterFactory
     {
 
-        private IMemcachedClient MemcachedClient { get; set; }
+        public IMemcachedClient? MemcachedClient { get; private set; }
 
-        private int ExpiryTimeSeconds { get; set; }
+        public int ExpiryTimeSeconds { get; private set; }
 
-        private string Address { get; set; }
+        public string Address { get; private set; }
 
-        private int Port { get; set; }
+        public int Port { get; private set; }
 
-        private string SessionId { get; set; }
+        public string SessionId { get; private set; }
 
-        private string KeyPrefix { get; set; }
+        public string KeyPrefix { get; private set; }
 
         public MemcachedAdapterFactory(string address, int port, int expiryTimeSeconds, string sessionId = "", string cacheKeyPrefix = "")
         {
             if (string.IsNullOrEmpty(address) || port <= 0)
             {
-                throw new ArgumentNullException("Address or Port value can not be null.");
+                throw new ArgumentNullException(nameof(address), "Value can not be null.");
             }
 
             Address = address;
@@ -38,7 +39,7 @@ namespace InMemory.Cache.Memcached
         {
             var services = new ServiceCollection();
             services.AddLogging();
-            services.AddEnyimMemcached(o => o.Servers = new List<Server> { new Server { Address = Address, Port = Port } });
+            services.AddEnyimMemcached(o => o.Servers = new List<Server> { new() { Address = Address, Port = Port } });
             var provider = services.BuildServiceProvider();
 
             MemcachedClient = provider.GetService<IMemcachedClient>();
@@ -50,10 +51,17 @@ namespace InMemory.Cache.Memcached
 
         public void Dispose()
         {
-            if (MemcachedClient != null)
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing && MemcachedClient != null)
             {
                 MemcachedClient.Dispose();
             }
         }
+
     }
 }
