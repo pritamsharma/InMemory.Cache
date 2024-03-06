@@ -1,0 +1,13 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/InMemory.Cache.Interface/bin/Debug/net6.0
+/InMemory.Cache.Interface/obj
+/InMemory.Cache.Memcached/bin/Debug/net6.0
+/InMemory.Cache.Memcached/obj
+/InMemory.Cache.Redis/bin/Debug/net6.0
+/InMemory.Cache.Redis/obj
+/Tests/InMemory.Cache.Test/bin/Debug/net6.0
+/Tests/InMemory.Cache.Test/obj
