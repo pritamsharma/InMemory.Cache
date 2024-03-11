@@ -50,7 +50,7 @@ namespace InMemory.Cache.Test
 
         internal async Task<bool> SetValue(string key)
         {
-            return await CacheAdapter.Set(key, GenerateTestData);
+            return await CacheAdapter.SetAsync(key, GenerateTestData);
         }
 
         public virtual async Task GetTestPositive()
@@ -59,7 +59,7 @@ namespace InMemory.Cache.Test
 
             _ = await SetValue(key);
 
-            var cacheValue = await CacheAdapter.Get<JObject>(key);
+            var cacheValue = await CacheAdapter.GetAsync<JObject>(key);
 
             _ = await RemoveKey(key);
 
@@ -70,7 +70,7 @@ namespace InMemory.Cache.Test
         {
             var key = "GetTestNegative_Key";
 
-            var cacheValue = await CacheAdapter.Get<JObject>(key);
+            var cacheValue = await CacheAdapter.GetAsync<JObject>(key);
 
             Assert.IsTrue(cacheValue == null || !cacheValue.HasValues);
         }
@@ -97,7 +97,7 @@ namespace InMemory.Cache.Test
 
         internal async Task<bool> RemoveKey(string key)
         {
-            return await CacheAdapter.Remove(key);
+            return await CacheAdapter.RemoveAsync(key);
         }
 
         public virtual async Task IsSetTestPositive()
@@ -106,7 +106,7 @@ namespace InMemory.Cache.Test
 
             _ = await SetValue(key);
 
-            var isSuccess = await CacheAdapter.IsSet(key);
+            var isSuccess = await CacheAdapter.IsSetAsync(key);
 
             _ = await RemoveKey(key);
 
@@ -117,7 +117,7 @@ namespace InMemory.Cache.Test
         {
             var key = "IsSetTestNegative_Key";
 
-            var isSuccess = await CacheAdapter.IsSet(key);
+            var isSuccess = await CacheAdapter.IsSetAsync(key);
 
             Assert.IsFalse(isSuccess);
         }

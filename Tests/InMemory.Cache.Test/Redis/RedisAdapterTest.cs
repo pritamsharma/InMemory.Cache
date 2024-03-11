@@ -6,7 +6,7 @@ namespace InMemory.Cache.Test.Redis
     public class RedisAdapterTest : CacheAdapterTestBase
     {
 
-        public RedisAdapterTest()
+        public RedisAdapterTest() : base()
         {
             var connectionString = Configuration["redis:address"] + ":" + Configuration["redis:port"] + ",allowAdmin=" + Configuration["redis:allowAdmin"];
             var expiryTimeSeconds = Convert.ToInt32(Configuration["redis:expiryTime"]);

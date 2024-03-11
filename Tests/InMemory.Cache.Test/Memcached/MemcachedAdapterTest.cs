@@ -7,7 +7,7 @@ namespace InMemory.Cache.Test.Memcached
     public class MemcachedAdapterTest : CacheAdapterTestBase
     {
 
-        public MemcachedAdapterTest()
+        public MemcachedAdapterTest():base()
         {
             var address = Configuration["memcached:address"] ?? string.Empty;
             var port = Convert.ToInt32(Configuration["memcached:port"] ?? string.Empty);

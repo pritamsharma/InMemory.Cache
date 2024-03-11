@@ -111,7 +111,7 @@ namespace InMemory.Cache.Redis
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns>True if successful</returns>
-        public async Task<bool> Set<T>(string key, T value)
+        public async Task<bool> SetAsync<T>(string key, T value)
         {
             var keyValue = ConstructKey(key);
 
@@ -128,7 +128,7 @@ namespace InMemory.Cache.Redis
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
         /// <returns></returns>
-        public async Task<T?> Get<T>(string key)
+        public async Task<T?> GetAsync<T>(string key)
         {
             var keyValue = ConstructKey(key);
 
@@ -142,7 +142,7 @@ namespace InMemory.Cache.Redis
         /// </summary>
         /// <param name="key"></param>
         /// <returns>True if successful</returns>
-        public async Task<bool> Remove(string key)
+        public async Task<bool> RemoveAsync(string key)
         {
             var keyValue = ConstructKey(key);
 
@@ -154,7 +154,7 @@ namespace InMemory.Cache.Redis
         /// </summary>
         /// <param name="key">Key name</param>
         /// <returns>True if key found</returns>
-        public async Task<bool> IsSet(string key)
+        public async Task<bool> IsSetAsync(string key)
         {
             var keyValue = ConstructKey(key);
 
