@@ -4,6 +4,14 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>Pritam.Cache.Interface</PackageId>
+    <Title>Simple cache management interface.</Title>
+    <Version>1.1.0</Version>
+    <Company>pritam.sharma.1983 </Company>
+    <Description>Interface for simple cache management.</Description>
+    <PackageProjectUrl>https://github.com/pritamsharma/InMemory.Cache.git</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/pritamsharma/InMemory.Cache.git</RepositoryUrl>
+    <PackageTags>Cache</PackageTags>
   </PropertyGroup>
 
 </Project>

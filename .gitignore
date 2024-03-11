@@ -3,11 +3,11 @@
 ################################################################################
 
 /.vs
-/InMemory.Cache.Interface/bin/Debug/net6.0
+/InMemory.Cache.Interface/bin
 /InMemory.Cache.Interface/obj
-/InMemory.Cache.Memcached/bin/Debug/net6.0
+/InMemory.Cache.Memcached/bin
 /InMemory.Cache.Memcached/obj
-/InMemory.Cache.Redis/bin/Debug/net6.0
+/InMemory.Cache.Redis/bin
 /InMemory.Cache.Redis/obj
-/Tests/InMemory.Cache.Test/bin/Debug/net6.0
+/Tests/InMemory.Cache.Test/bin
 /Tests/InMemory.Cache.Test/obj

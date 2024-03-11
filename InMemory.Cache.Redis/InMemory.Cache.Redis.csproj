@@ -4,6 +4,16 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>Pritam.Cache.Redis</PackageId>
+    <Title>Simple cache management in Redis.</Title>
+    <Authors>pritam.sharma.1983 </Authors>
+    <Company>Pritam</Company>
+    <Description>Simple cache management in Redis.</Description>
+    <PackageProjectUrl>https://github.com/pritamsharma/InMemory.Cache.git</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/pritamsharma/InMemory.Cache.git</RepositoryUrl>
+    <PackageTags>Cache;Redis;</PackageTags>
+    <Version>1.2.0</Version>
   </PropertyGroup>
 
   <ItemGroup>

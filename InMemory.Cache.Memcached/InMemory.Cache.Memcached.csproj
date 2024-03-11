@@ -4,6 +4,15 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>Pritam.Cache.Memcached</PackageId>
+    <Title>Simple cache management in Memcached.</Title>
+    <Version>1.1.0</Version>
+    <Authors>pritam.sharma.1983</Authors>
+    <Company>Pritam</Company>
+    <Description>Simple cache management in Memcached.</Description>
+    <PackageProjectUrl>https://github.com/pritamsharma/InMemory.Cache.git</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/pritamsharma/InMemory.Cache.git</RepositoryUrl>
+    <PackageTags>Cache;Memcached;</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
