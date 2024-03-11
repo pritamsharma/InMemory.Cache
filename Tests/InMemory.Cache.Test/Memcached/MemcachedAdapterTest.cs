@@ -9,13 +9,12 @@ namespace InMemory.Cache.Test.Memcached
 
         public MemcachedAdapterTest():base()
         {
-            var address = Configuration["memcached:address"] ?? string.Empty;
-            var port = Convert.ToInt32(Configuration["memcached:port"] ?? string.Empty);
-            var expiryTimeSeconds = Convert.ToInt32(Configuration["memcached:expiryTime"]);
-            var keyPrefix = Configuration["memcached:CacheKeyPrefix"] ?? string.Empty;
-            var sessionId = new Random().Next().ToString();
-
-            var redisAdapterFactory = new MemcachedAdapterFactory(address, port, expiryTimeSeconds, sessionId, keyPrefix ?? string.Empty);
+            var redisAdapterFactory = new MemcachedAdapterFactory(
+                address: Configuration["Memcached:Address"] ?? string.Empty, 
+                port: Convert.ToInt32(Configuration["Memcached:Port"] ?? string.Empty), 
+                expiryTimeSeconds: Convert.ToInt32(Configuration["Memcached:ExpiryTime"]), 
+                sessionId: new Random().Next().ToString(), 
+                cacheKeyPrefix: Configuration["Memcached:CacheKeyPrefix"] ?? string.Empty);
 
             CacheAdapter = redisAdapterFactory.CreateCacheAdapter();
         }

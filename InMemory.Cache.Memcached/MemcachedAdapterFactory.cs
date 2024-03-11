@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Enyim.Caching.Configuration;
 using Enyim.Caching;
-using Microsoft.Extensions.Configuration;
 
 namespace InMemory.Cache.Memcached
 {

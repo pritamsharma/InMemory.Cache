@@ -8,12 +8,11 @@ namespace InMemory.Cache.Test.Redis
 
         public RedisAdapterTest() : base()
         {
-            var connectionString = Configuration["redis:address"] + ":" + Configuration["redis:port"] + ",allowAdmin=" + Configuration["redis:allowAdmin"];
-            var expiryTimeSeconds = Convert.ToInt32(Configuration["redis:expiryTime"]);
-            var keyPrefix = Configuration["redis:CacheKeyPrefix"] ?? string.Empty;
-            var sessionId = new Random().Next().ToString();
-
-            var redisAdapterFactory = new RedisAdapterFactory(connectionString ?? string.Empty, expiryTimeSeconds, sessionId, keyPrefix ?? string.Empty);
+            var redisAdapterFactory = new RedisAdapterFactory(
+                configuration: Configuration["Redis:Connection"] ?? string.Empty,
+                expiryTimeSeconds: Convert.ToInt32(Configuration["Redis:ExpiryTime"]),
+                sessionId: new Random().Next().ToString(),
+                cacheKeyPrefix: Configuration["Redis:CacheKeyPrefix"] ?? string.Empty);
 
             CacheAdapter = redisAdapterFactory.CreateCacheAdapter();
         }
